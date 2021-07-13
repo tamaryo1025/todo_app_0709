@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: ChangeNotifierProvider<MainModel>(
-        create: (_) => MainModel()..getTodoList(),
+        create: (_) => MainModel()..getTodoListRealTime(),
         child: Scaffold(
         appBar: AppBar(
           
