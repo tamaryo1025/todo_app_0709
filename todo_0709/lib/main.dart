@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'add_page.dart';
 import 'main_model.dart';
 
 void main() async {
@@ -19,7 +20,15 @@ class MyApp extends StatelessWidget {
        
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<MainModel>(
+      home: MainPage(),
+    );
+  }
+}
+class MainPage extends StatelessWidget{
+   // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return  ChangeNotifierProvider<MainModel>(
         create: (_) => MainModel()..getTodoListRealTime(),
         child: Scaffold(
         appBar: AppBar(
@@ -37,8 +46,20 @@ class MyApp extends StatelessWidget {
             );
           }
         ),
-          ),
+        floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+         await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Addpage(),
+            fullscreenDialog: true,
+            ),
+          );
+        },
+        child: const Icon(Icons.navigation),
+        backgroundColor: Colors.green,
       ),
-    );
+          ),
+      );
   }
 }
+

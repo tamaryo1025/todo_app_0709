@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_0709/todo.dart';
@@ -7,6 +9,7 @@ import 'package:todo_0709/todo.dart';
 
 class MainModel extends ChangeNotifier{
   List<Todo> todoList=[];
+  late StreamSubscription sub;
 
   Future getTodoList() async{
     final snapshot = await FirebaseFirestore.instance.collection('todoList').get();
@@ -18,7 +21,7 @@ class MainModel extends ChangeNotifier{
 
   void getTodoListRealTime() {
     final snapshots = FirebaseFirestore.instance.collection('todoList').snapshots();
-    snapshots.listen((snapshot){
+    sub = snapshots.listen((snapshot){
       final docs = snapshot.docs;
       final todoList = docs.map((doc) => Todo(doc)).toList();
       todoList.sort((a,b) => b.createdAt.compareTo(a.createdAt));
@@ -27,5 +30,10 @@ class MainModel extends ChangeNotifier{
     }
     );
   }
-
+  // dispose は ChangeNotifierが使われなくなるタイミングでよばれる。
+  @override
+  void dispose(){
+    sub.cancel();
+    super.dispose();
+  }
 }
